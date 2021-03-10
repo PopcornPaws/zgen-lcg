@@ -1,4 +1,3 @@
-use std::convert::TryFrom;
 use std::iter::Iterator;
 use std::ops::Range;
 
@@ -59,25 +58,24 @@ impl Iterator for Lcg {
 #[cfg(test)]
 mod tests {
     use super::Lcg;
-    use std::ops::Range;
 
     #[test]
     fn check_range() {
         let range = -500..150;
-        let mut lcg = Lcg::new(range.clone(), 7, 3, 5).unwrap();
-        for i in 0..5000 {
+        let mut lcg = Lcg::new(range.clone(), u64::MAX, 1432, 5).unwrap();
+        for _ in 0..5000 {
             assert!(range.contains(&lcg.next().unwrap()))
         }
 
         let range = 1..200;
         let mut lcg = Lcg::new(range.clone(), 542342, 344, 4335).unwrap();
-        for i in 0..5000 {
+        for _ in 0..5000 {
             assert!(range.contains(&lcg.next().unwrap()))
         }
 
         let range = 1000..9999;
         let mut lcg = Lcg::new(range.clone(), 1103515245, 12345, 4343).unwrap();
-        for i in 0..5000 {
+        for _ in 0..5000 {
             assert!(range.contains(&lcg.next().unwrap()))
         }
     }
