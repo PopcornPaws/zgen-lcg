@@ -1,6 +1,10 @@
 use std::iter::Iterator;
 use std::ops::Range;
 
+// NOTE In the end I didn't make it generic over the integers because I would have
+// needed the external `num` crate and require T: num::Integer. It would have
+// made this example too complicated, so I thought this will do for now.
+
 /// Linear Congruential Generator
 pub struct Lcg {
     /// Minimum value
@@ -16,7 +20,8 @@ pub struct Lcg {
 }
 
 impl Lcg {
-    /// Generates a new instance of [`Lcg`] if a suitable range is provided for random number generation.
+    /// Generates a new instance of [`Lcg`] if a suitable range is provided for
+    /// random number generation.
     ///
     /// Panics if the input types don't match.
     pub fn new(
@@ -29,11 +34,12 @@ impl Lcg {
             Err("Invalid range was given!".to_string())
         } else if range.end.checked_sub(range.start).is_none() {
             // if the range doesn't fit into an i64 it won't fit into an u64 either
+            // this is kinda ugly and could be resolved by using a 128 bit number to store the multiplier
             Err("Too large range was given!".to_string())
         } else {
             Ok(Self {
                 min: range.start,
-                modulus: (range.end - range.start) as u64, // we know that we can safely cast now
+                modulus: (range.end - range.start) as u64, // we know that we can safely cast now and end > start
                 multiplier,
                 increment,
                 seed,
@@ -51,6 +57,8 @@ impl Iterator for Lcg {
             .wrapping_mul(self.seed)
             .wrapping_add(self.increment)
             % self.modulus;
+        // NOTE here, instead of just casting via `as`, I could use TryFrom and
+        // handle the possible error, but for this example this might do.
         Some(self.seed as i64 + self.min)
     }
 }
@@ -82,10 +90,16 @@ mod tests {
 
     #[test]
     fn bad_ranges() {
+        // too large range
         let range = i64::MIN..i64::MAX;
         assert!(Lcg::new(range, 1, 2, 3).is_err());
 
+        // empty range
         let range = 0..0;
+        assert!(Lcg::new(range, 1, 2, 3).is_err());
+
+        // end > start, so range will be empty
+        let range = 3242..-555;
         assert!(Lcg::new(range, 1, 2, 3).is_err());
     }
 }
