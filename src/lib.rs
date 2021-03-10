@@ -68,7 +68,7 @@ mod tests {
     use super::Lcg;
 
     #[test]
-    fn check_range() {
+    fn check_rng() {
         let range = -500..150;
         let mut lcg = Lcg::new(range.clone(), u64::MAX, 1432, 5).unwrap();
         for _ in 0..5000 {
