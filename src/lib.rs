@@ -1,9 +1,10 @@
 use std::iter::Iterator;
 use std::ops::Range;
 
-// NOTE In the end I didn't make it generic over the integers because I would have
-// needed the external `num` crate and require T: num::Integer. It would have
-// made this example too complicated, so I thought this will do for now.
+// NOTE In the end I didn't make it generic over the integers because I would
+// possibly have needed the external `num` crate and require T: num::Integer.
+// It would have made this example too complicated, so I thought this will do
+// for now.
 
 /// Linear Congruential Generator
 pub struct Lcg {
