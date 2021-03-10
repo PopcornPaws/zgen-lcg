@@ -1,0 +1,5 @@
+[package]
+name = "zgen-lcg"
+version = "0.1.0"
+authors = ["Mark Melczer <melczer7@gmail.com>"]
+edition = "2018"
